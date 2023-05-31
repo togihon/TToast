@@ -14,4 +14,5 @@ TToast({
   background: 'Background color',
 })
 ```
+Ps: You can use the default TToast style. Therefore, you can use the `text` and `position` properties.
 

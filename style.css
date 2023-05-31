@@ -1,0 +1,30 @@
+:root {
+    --background-color-active: rgb(39, 39, 37);
+    --font-color: white;
+    --font-size: 14px;
+    --width: 250px;
+    --position-top: 0;
+    --position-left: 0;
+}
+
+/* SNACKBAR */
+.ttoast {
+    border-radius: 10px;
+    width: var(--width);
+    position: fixed;
+    font-size: var(--font-size);
+    padding: 15px 20px;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0);
+    color: rgba(0, 0, 0, 0);
+    text-transform: capitalize;
+    top: var(--position-top);
+    left: var(--position-left);
+    transform: translate(-50%, -50%);
+    transition: 500ms ease-in-out;
+}
+
+.active {
+    background: var(--background-color-active);
+    color: var(--font-color);
+}

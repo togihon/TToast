@@ -1,5 +1,5 @@
 # TToast
-This is a simple javascript library to create a toast in a web.
+This is a simple javascript library to create a toast in a web. Still under development but you can use it now.
 
 # How To Use
 1. Download js and css files. Place them to your project.

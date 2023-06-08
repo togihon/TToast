@@ -23,11 +23,22 @@ function createTToast(text) {
     return [elementID, newTToast]
 }
 
-function checkPosition(positionString, top, bottom) {
+function checkAndSetPosition(positionString, elementID) {
     position = positionString.split("|")
 
+    var existElement = document.getElementById(elementID)
+    check = (existElement.offsetHeight - 30) / 16
+    if (check <= 2) {
+        multiplier = 1
+    } else if (check <= 4) {
+        multiplier = 2
+    }
+
+    var top = multiplier * (16 * 0.5)
+    var bottom = 100 - top
+   
     var positionArray = ["top", "middle", "bottom", "left", "center", "right"]
-    var positionValue = [top + "%", "50%", bottom + "%", "15%", "50%", "85%"]
+    var positionValue = [top + "%", "50%", bottom + "%", "13%", "50%", "87%"]
     for (let index = 0; index < positionArray.length; index++) {
         if (position[0] == positionArray[index]) {
             document.documentElement.style.setProperty('--position-top', positionValue[index])
@@ -48,18 +59,7 @@ function multiplierMargin() {
 
 function TToast(options) {
     const [elementID, newTToast] = createTToast(options.text)
-    var existElement = document.getElementById(elementID)
-    check = (existElement.offsetHeight - 30) / 16
-    if (check <= 2) {
-        multiplier = 1
-    } else if (check <= 4) {
-        multiplier = 2
-    }
-
-    topPosition = multiplier * (16 * 0.5)
-    bottomPosition = 100 - topPosition
-
-    checkPosition(options.position, topPosition, bottomPosition)
+    checkAndSetPosition(options.position, elementID)
 
     // if (options.color != "") {
     //     document.documentElement.style.setProperty('--font-color', options.color);

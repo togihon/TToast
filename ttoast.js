@@ -12,14 +12,42 @@ function createNewElement(id, className, innerHTML = '') {
     return newElement
 }
 
-function TToast(options) {
+function createTToast(text) {
     var elementID = `TToast-${new Date().getTime()}`
     var newTToast = createNewElement(elementID, 'ttoast')
-    var ttoastText = createNewElement('', 'ttoast-text', options.text)
+    var ttoastText = createNewElement('', 'ttoast-text', text)
 
     newTToast.appendChild(ttoastText)
     document.body.appendChild(newTToast)
 
+    return [elementID, newTToast]
+}
+
+function checkPosition(positionString, top, bottom) {
+    position = positionString.split("|")
+
+    var positionArray = ["top", "middle", "bottom", "left", "center", "right"]
+    var positionValue = [top + "%", "50%", bottom + "%", "15%", "50%", "85%"]
+    for (let index = 0; index < positionArray.length; index++) {
+        if (position[0] == positionArray[index]) {
+            document.documentElement.style.setProperty('--position-top', positionValue[index])
+        }
+        if (position[1] == positionArray[index]) {
+            document.documentElement.style.setProperty('--position-left', positionValue[index])
+        }
+    }
+}
+
+function fontSize() {
+
+}
+
+function multiplierMargin() {
+
+}
+
+function TToast(options) {
+    const [elementID, newTToast] = createTToast(options.text)
     var existElement = document.getElementById(elementID)
     check = (existElement.offsetHeight - 30) / 16
     if (check <= 2) {
@@ -31,26 +59,15 @@ function TToast(options) {
     topPosition = multiplier * (16 * 0.5)
     bottomPosition = 100 - topPosition
 
-    position = options.position.split("|")
+    checkPosition(options.position, topPosition, bottomPosition)
 
-    var positionArray = ["top", "middle", "bottom", "left", "center", "right"]
-    var positionValue = [topPosition + "%", "50%", bottomPosition + "%", "15%", "50%", "85%"]
-    for (let index = 0; index < positionArray.length; index++) {
-        if (position[0] == positionArray[index]) {
-            document.documentElement.style.setProperty('--position-top', positionValue[index])
-        }
-        if (position[1] == positionArray[index]) {
-            document.documentElement.style.setProperty('--position-left', positionValue[index])
-        }
-    }
+    // if (options.color != "") {
+    //     document.documentElement.style.setProperty('--font-color', options.color);
+    // }
 
-    if (options.color != "") {
-        document.documentElement.style.setProperty('--font-color', options.color);
-    }
-
-    if (options.background != "") {
-        document.documentElement.style.setProperty('--background-color-active', options.background);
-    }
+    // if (options.background != "") {
+    //     document.documentElement.style.setProperty('--background-color-active', options.background);
+    // }
 
     setTimeout(function () {
         newTToast.className += ' active';
@@ -64,29 +81,3 @@ function TToast(options) {
         newTToast.parentNode.removeChild(newTToast);
     }, TIME_ON_SCREEN + 500);
 }
-
-function notify(msg) {
-    var exists = document.querySelectorAll('.notify');
-    if (exists.length < 1) {
-        var uid = `notify-${new Date().getTime()}`;
-        var newEl = createElement(uid, 'notify');
-        var text = createElement('', 'notify-text', msg);
-        newEl.appendChild(text);
-
-        document.body.appendChild(newEl);
-        newEl.style.bottom = (10 + 55 * (exists.length)) + 'px';
-
-        setTimeout(function () {
-            newEl.className += ' notify-active';
-        }, 0);
-
-        setTimeout(function () {
-            newEl.className = ' notify';
-        }, TIME_ON_SCREEN);
-
-        setTimeout(function () {
-            newEl.parentNode.removeChild(newEl);
-        }, TIME_ON_SCREEN + 500);
-    }
-
-};

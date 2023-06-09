@@ -9,10 +9,16 @@ This is a simple javascript library to create a toast in a web. Still under deve
 ```
 TToast({
   text: 'Your text',
-  position: 'bottom|center', //top, middle, bottom | left, center, right
+  position: 'bottom|center',
   color: 'Font Color',
   background: 'Background color',
 })
 ```
-Ps: You can use the default TToast style. Therefore, you can use the `text` and `position` properties.
+# The Attributes
+Right now, there are two attributes working. They are `text` and `position`.  
+All attributes must be written in lowercase.  
+  
+`position` must be written in `pos1|pos2` format.  
+pos1 : top, middle, bottom  
+pos2 : left, center, right
 

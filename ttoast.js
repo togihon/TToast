@@ -65,10 +65,19 @@ function createTToast(text) {
 
 function checkAttribute(options) {
     let isValid = true
+
     Object.keys(options).forEach(attribute => {
         if (!ATTRIBUTES.includes(attribute)) {
-            console.log(`'${attribute}' is a wrong attribute. please check carefully.`)
+            console.log("'${attribute}' is a wrong attribute. please check carefully.")
             isValid = false
+        } else {
+            setDefaultValue(options)
+
+            var pattern = /^[a-z]+(\|[a-z]+)$/;
+            if (!pattern.test(options.position)) {
+                console.log("'position' value format is not valid.");
+                isValid = false
+            }
         }
     })
 
@@ -91,13 +100,16 @@ function checkAndSetPosition(positionString, newTToast) {
 
     const positionArray = ["top", "middle", "bottom", "left", "center", "right"]
     let positionValue = [top + "%", "50%", bottom + "%", "13%", "50%", "87%"]
-    for (let index = 0; index < positionArray.length; index++) {
-        if (position[0] == positionArray[index]) {
-            newTToast.style.top = positionValue[index]
-        }
-        if (position[1] == positionArray[index]) {
-            newTToast.style.left = positionValue[index]
-        }
+
+    for (let index = 0; index < 3; index++) {
+        position[0] == positionArray[index]
+            ? newTToast.style.top = positionValue[index]
+            : newTToast.style.top = positionValue[index + 3]
+
+        position[1] == positionArray[index + 3]
+            ? newTToast.style.left = positionValue[index + 3]
+            : newTToast.style.left = positionValue[index + 2]
+
     }
 }
 
@@ -120,7 +132,6 @@ function fontSize() {
 }
 
 function TToast(options) {
-
     checkAttribute(options) ?
         (() => {
             setDefaultValue(options)

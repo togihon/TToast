@@ -2,7 +2,7 @@
 //31 May 2023
 
 const TIME_ON_SCREEN = 2000
-const ATTRIBUTES = ['text', 'position', 'font-size', 'background', 'color']
+const ATTRIBUTES = ['text', 'position', 'fontSize', 'background', 'color']
 
 function createCSSClass(className, style) {
     const styleElement = document.createElement('style');
@@ -30,6 +30,7 @@ const ttoastStyle = {
     'background-color': 'rgba(0, 0, 0, 0)',
     'color': 'rgba(0, 0, 0, 0)',
     'text-transform': 'capitalize',
+    'font-family': 'Arial',
     'transform': 'translate(-50%, -50%)',
     'transition': '500ms ease-in-out'
 
@@ -68,7 +69,7 @@ function checkAttribute(options) {
 
     Object.keys(options).forEach(attribute => {
         if (!ATTRIBUTES.includes(attribute)) {
-            console.log("'${attribute}' is a wrong attribute. please check carefully.")
+            console.log("`${attribute}` is a wrong attribute. please check carefully.")
             isValid = false
         } else {
             setDefaultValue(options)
@@ -91,12 +92,15 @@ function setDefaultValue(options) {
     if (!options.hasOwnProperty('position')) {
         options.position = 'bottom|center';
     }
+    if (!options.hasOwnProperty('fontSize')) {
+        options.fontSize = 'normal';
+    }
 }
 
 
-function checkAndSetPosition(positionString, newTToast) {
-    const position = positionString.split("|")
-    const [top, bottom] = calculateTopBottom(newTToast)
+function checkAndSetPosition(newTToast, toastPosition, fontSize) {
+    const position = toastPosition.split("|")
+    const [top, bottom] = calculateTopBottom(newTToast, fontSize)
     let falseCountTop = 0
     let falseCountLeft = 0
 
@@ -118,23 +122,43 @@ function checkAndSetPosition(positionString, newTToast) {
 
 }
 
-function calculateTopBottom(newTToast) {
+function calculateTopBottom(newTToast, fontSize) {
+    let top, bottom, checkRow, multiplier
+
+    fontSize = setFontSize(fontSize)
+    newTToast.style.fontSize = fontSize
     checkRow = (newTToast.offsetHeight - 30) / 16
+
     if (checkRow <= 2) {
         multiplier = 1
     } else if (checkRow <= 4) {
-        multiplier = 2
+        multiplier = 1.25
+    } else if (checkRow <= 6) {
+        multiplier = 1.5
     }
 
-    let top = multiplier * (16 * 0.5)
-    let bottom = 100 - top
+    top = multiplier * (16 * 0.5)
+    bottom = 100 - top
 
     return [top, bottom]
-}
-
-function fontSize() {
 
 }
+
+function setFontSize(fontSize) {
+    switch (fontSize) {
+        case "small":
+            return "12px"
+        case "large":
+            return "16px"
+        default:
+            return "14px"
+    }
+}
+
+function isMobileDevice() {
+    return window.matchMedia("(orientation: portrait)").matches || (navigator.userAgent.indexOf('IEMobile') !== -1);
+}
+
 
 function TToast(options) {
     checkAttribute(options) ?
@@ -142,7 +166,7 @@ function TToast(options) {
             setDefaultValue(options)
 
             const newTToast = createTToast(options.text)
-            checkAndSetPosition(options.position, newTToast)
+            checkAndSetPosition(newTToast, options.position, options.fontSize)
 
             setTimeout(function () { newTToast.className += ' active' }, 0)
             setTimeout(function () { newTToast.className = ' ttoast' }, TIME_ON_SCREEN)

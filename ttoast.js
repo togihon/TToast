@@ -97,6 +97,8 @@ function setDefaultValue(options) {
 function checkAndSetPosition(positionString, newTToast) {
     const position = positionString.split("|")
     const [top, bottom] = calculateTopBottom(newTToast)
+    let falseCountTop = 0
+    let falseCountLeft = 0
 
     const positionArray = ["top", "middle", "bottom", "left", "center", "right"]
     let positionValue = [top + "%", "50%", bottom + "%", "13%", "50%", "87%"]
@@ -104,13 +106,16 @@ function checkAndSetPosition(positionString, newTToast) {
     for (let index = 0; index < 3; index++) {
         position[0] == positionArray[index]
             ? newTToast.style.top = positionValue[index]
-            : newTToast.style.top = positionValue[index + 3]
+            : falseCountTop += 1
 
         position[1] == positionArray[index + 3]
             ? newTToast.style.left = positionValue[index + 3]
-            : newTToast.style.left = positionValue[index + 2]
-
+            : falseCountLeft += 1
     }
+
+    !positionArray.includes(position[0]) || falseCountTop == 3 ? newTToast.style.top = positionValue[2] : null
+    !positionArray.includes(position[1]) || falseCountLeft == 3 ? newTToast.style.left = positionValue[4] : null
+
 }
 
 function calculateTopBottom(newTToast) {

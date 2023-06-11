@@ -6,7 +6,6 @@
 */
 
 const TIME_ON_SCREEN = 2000
-const ATTRIBUTES = ['text', 'position', 'fontsize', 'background', 'color', 'icon']
 
 function createCSSClass(className, style) {
     const styleElement = document.createElement('style');
@@ -42,9 +41,8 @@ const ttoastStyle = {
 const ttoastIcon = { 'flex-basis': '12%' }
 const ttoastText = { 'flex-basis': '88%' }
 
-createCSSClass('ttoast', ttoastStyle)
-
 function createNewElement(id, className, innerHTML = '') {
+    createCSSClass('ttoast', ttoastStyle)
     const newElement = document.createElement('div')
     newElement.id = id
     newElement.className = className
@@ -66,14 +64,24 @@ function createTToast(text, icon) {
     return newTToast
 }
 
-function checkAttribute(options) {
+function checkAttribute(checkedAttribute, attributeArray) {
     let isValid = true
 
-    Object.keys(options).forEach(attribute => {
-        if (!ATTRIBUTES.includes(attribute)) {
+    Object.keys(checkedAttribute).forEach(attribute => {
+        if (!attributeArray.includes(attribute)) {
             console.log("'" + attribute + "' is a wrong attribute. please check carefully.")
             isValid = false
-        } else {
+        }
+    })
+
+    return isValid
+}
+
+function checkOptions(options) {
+    let isValid = true
+    const optionsArray = ['text', 'position', 'fontsize', 'background', 'color', 'icon']
+    checkAttribute(options, optionsArray)
+        ? (() => {
             setDefaultValue(options)
 
             var pattern = /^[a-z]+(\|[a-z]+)$/;
@@ -81,52 +89,69 @@ function checkAttribute(options) {
                 console.log("'position' value format is not valid.");
                 isValid = false
             }
-        }
-    })
-
+        })()
+        : null
     return isValid
 }
 
 function setDefaultValue(options) {
-    if (!options.hasOwnProperty('text')) {
-        options.text = 'Your text here';
-    }
-    if (!options.hasOwnProperty('position')) {
-        options.position = 'bottom|center';
-    }
-    if (!options.hasOwnProperty('fontsize')) {
-        options.fontsize = 'normal';
-    }
-    if (!options.hasOwnProperty('background')) {
-        options.background = 'rgb(39, 39, 37)';
-    }
-    if (!options.hasOwnProperty('color')) {
-        options.color = 'white';
-    }
+    if (!options.hasOwnProperty('text')) { options.text = 'Your text here' }
+    if (!options.hasOwnProperty('position')) { options.position = 'bottom|center' }
+    if (!options.hasOwnProperty('fontsize')) { options.fontsize = 'normal' }
+    if (!options.hasOwnProperty('background')) { options.background = 'rgb(39, 39, 37)' }
+    if (!options.hasOwnProperty('color')) { options.color = 'white' }
 }
 
+function convertArray(inputArray) {
+    var outputObject = {}
+
+    for (var i = 0; i < inputArray.length; i++) {
+        var key = inputArray[i]
+        if (!outputObject.hasOwnProperty(key)) {
+            outputObject[key] = []
+        }
+        outputObject[key].push(String.fromCharCode(97 + i))
+    }
+
+    return outputObject
+}
 
 function checkAndSetPosition(newTToast, toastPosition) {
     const position = toastPosition.split("|")
+    const positionCheck = convertArray(position)
     const [top, bottom] = calculateTopBottom(newTToast)
-    let falseCountTop = 0
-    let falseCountLeft = 0
+    let isTopSet, isLeftSet = false
 
     const positionArray = ["top", "middle", "bottom", "left", "center", "right"]
     let positionValue = [top + "%", "50%", bottom + "%", "13%", "50%", "87%"]
 
-    for (let index = 0; index < 3; index++) {
-        position[0] == positionArray[index]
-            ? newTToast.style.top = positionValue[index]
-            : falseCountTop += 1
+    checkAttribute(positionCheck, positionArray)
+        ? (() => {
+            for (let index = 0; index < 3; index++) {
+                position[0] == positionArray[index]
+                    ? (() => {
+                        newTToast.style.top = positionValue[index]
+                        isTopSet = true
+                    })()
+                    : null
+                position[1] == positionArray[index + 3]
+                    ? (() => {
+                        newTToast.style.left = positionValue[index + 3]
+                        isLeftSet = true
+                    })()
+                    : null
+            }
 
-        position[1] == positionArray[index + 3]
-            ? newTToast.style.left = positionValue[index + 3]
-            : falseCountLeft += 1
-    }
-
-    !positionArray.includes(position[0]) || falseCountTop == 3 ? newTToast.style.top = positionValue[2] : null
-    !positionArray.includes(position[1]) || falseCountLeft == 3 ? newTToast.style.left = positionValue[4] : null
+            if (!isTopSet && isLeftSet) {
+                newTToast.style.top = positionValue[2];
+            } else if (isTopSet && !isLeftSet) {
+                newTToast.style.left = positionValue[4];
+            }
+        })()
+        : (() => {
+            newTToast.style.top = positionValue[2]
+            newTToast.style.left = positionValue[4]
+        })()
 
 }
 
@@ -134,13 +159,9 @@ function calculateTopBottom(newTToast) {
     let top, bottom, checkRow, multiplier
     checkRow = (newTToast.offsetHeight - 30) / 16
 
-    if (checkRow <= 2) {
-        multiplier = 1
-    } else if (checkRow <= 4) {
-        multiplier = 1.25
-    } else if (checkRow <= 6) {
-        multiplier = 1.5
-    }
+    if (checkRow <= 2) { multiplier = 1 }
+    else if (checkRow <= 4) { multiplier = 1.25 }
+    else if (checkRow <= 6) { multiplier = 1.5 }
 
     top = multiplier * (16 * 0.5)
     bottom = 100 - top
@@ -176,7 +197,7 @@ function isMobileDevice() {
 }
 
 function TToast(options) {
-    checkAttribute(options) ?
+    checkOptions(options) ?
         (() => {
             setDefaultValue(options)
 

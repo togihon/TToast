@@ -28,7 +28,6 @@ pos2 : left, center, right
 
 `fontSize` : small, normal, large  
 `color` and `background` : you can use all color format (HEX, RGB, RBGA, etc.)  
-`icon` : this is optional. if you want to use this, you have to include an icon kit.  
-for example i want to use FontAwesome and i included the kit into my project.  
+`icon` : this is optional. if you want to use this, you have to include an icon kit. for example i want to use FontAwesome and i included the kit into my project.  
 in `icon` attribute, just fill the class name (**fas fa-check**).
 

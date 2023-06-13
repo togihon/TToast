@@ -1,6 +1,7 @@
 <p align="center" width="100%"><img width="33%" src="https://i.ibb.co/jyb1q7k/Screenshot-2.png"</img><br>
-A simple and lightweight javascript library to create a toast on your website</p> 
-
+A simple and lightweight javascript library to create a toast on your website. <br> 
+Read documentation: https://togi-simaremare.my.id/ttoast/
+</p>
  
 
 # How To Use

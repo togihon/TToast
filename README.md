@@ -30,6 +30,6 @@ pos1 : top, middle, bottom
 pos2 : left, center, right  
 - `fontSize` : small, normal, large  
 - `color` and `background` : you can use all color format (HEX, RGB, RBGA, etc.)  
-- `icon` : this one is optional. But, if you want to use this you have to include an icon kit. For example i use FontAwesome so the kit is already included in my project. To show a `check icon` in FontAwesome we use `<i class="fas fa-check"></i>`.  
+- `icon` : this one is optional. But, if you want to use this you have to include an icon kit. For example i use FontAwesome so the kit is already included in my project. To show a `check icon` in FontAwesome we use   `<i class="fas fa-check"></i>`.  
 But, in `icon` attribute, just fill the class name (**fas fa-check**).
 

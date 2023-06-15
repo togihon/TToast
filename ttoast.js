@@ -119,11 +119,47 @@ function convertArray(inputArray) {
 function checkAndSetPosition(newTToast, toastPosition) {
     const position = toastPosition.split("|")
     const positionCheck = convertArray(position)
-    const [top, bottom] = calculateTopBottom(newTToast)
+    let [top, bottom] = calculateTopBottom(newTToast)
     let isTopSet, isLeftSet = false
 
+    let left = 13, right = 87
+
+    if (isMobileDevice()) {
+        window.matchMedia("(orientation: portrait)").matches
+            ? (() => {
+                let width = getDeviceWidth()
+                width <= 380
+                    ? (() => {
+                        left += 28; right -= 28
+                        bottom += 3; top -= 4
+                    })()
+                    : width <= 395
+                        ? (() => {
+                            left += 28; right -= 28
+                            bottom += 3; top -= 4
+                        })()
+                        : null
+            })()
+            : (() => {
+                getDeviceWidth
+                let width = getDeviceWidth()
+                width <= 680
+                    ? (() => {
+                        left += 10; right -= 10
+                    })()
+                    : width <= 740
+                        ? (() => {
+                            left += 7.5; right -= 7.5
+                        })()
+                        : width <= 855
+                            ? (() => {
+                                left += 5.5; right -= 5.5
+                            })()
+                            : null
+            })()
+    }
     const positionArray = ["top", "middle", "bottom", "left", "center", "right"]
-    let positionValue = [top + "%", "50%", bottom + "%", "13%", "50%", "87%"]
+    let positionValue = [top + "%", "50%", bottom + "%", left + "%", "50%", right + "%"]
 
     checkAttribute(positionCheck, positionArray)
         ? (() => {
@@ -192,8 +228,13 @@ function setFontSize(newTToast, fontSize) {
     }
 }
 
+function getDeviceWidth() {
+    let deviceWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+    return deviceWidth
+}
+
 function isMobileDevice() {
-    return window.matchMedia("(orientation: portrait)").matches || (navigator.userAgent.indexOf('IEMobile') !== -1);
+    return window.matchMedia("(orientation: portrait)").matches || window.matchMedia("(orientation: landscape)").matches || navigator.userAgent.indexOf('IEMobile') !== -1
 }
 
 function TToast(options) {

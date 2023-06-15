@@ -8,7 +8,7 @@ Read documentation: https://togi-simaremare.my.id/ttoast/
 1. Download js files and place it to your project folder **OR** you can use jsdelivr CDN 
 2. Include the js file into your project (ex. in index.html)  
 ```
-<script src="https://cdn.jsdelivr.net/gh/togihon/TToast@854b02dce32c5531332afb6d41b5088019207045/ttoast.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/togihon/TToast@update/ttoast.js"></script>
 ```
 3. To show a toast, use this code:
 
